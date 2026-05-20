@@ -1,0 +1,283 @@
+/* ==========================================================================
+   1. Basic Reset and Body Styling (Modern Gradient Background)
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    /* Soft, modern gradient background that is easy on the eyes */
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    min-height: 100vh;
+    color: #333;
+    padding: 40px 20px;
+}
+
+/* ==========================================================================
+   2. Gallery Container (Glassmorphism Effect)
+   ========================================================================== */
+.gallery-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.4); /* Transparent glass effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.gallery-container h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    /* Text Gradient Color */
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.gallery-container p {
+    margin-bottom: 40px;
+    color: #616e7c;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   3. Image Grid and Unique Hover Effects (Shine and Zoom)
+   ========================================================================== */
+.image-grid {
+    display: grid;
+    /* Responsive Grid Layout */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 10px;
+}
+
+/* Container box for each image */
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    background-color: #fff;
+    height: 220px; /* Fixed height for uniform grid look */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    border: 4px solid #fff; /* Elegant white border around images */
+}
+
+/* Image styling */
+/* Container box for the image - MUST have a fixed height */
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 4px solid #fff;
+    
+    /* 🌟 IMPORTANT: The parent must have a fixed height for 100% to work */
+    height: 220px; 
+    
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Inside Image Styling */
+.gallery-img {
+    display: block;     /* Removes unwanted default bottom spacing */
+    width: 100%;        /* Takes full width of .gallery-item */
+    height: 100%;       /* Takes full height of .gallery-item */
+    object-fit: cover;  /* Crops and fits the image perfectly without stretching */
+    filter: grayscale(20%); 
+    transition: transform 0.5s ease, filter 0.5s ease;
+
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 4px solid #fff;
+    
+    /* Increased height to support portrait images properly */
+    height: 380px; 
+    
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+
+/* Hover Effect to test if transition works */
+.gallery-item:hover .gallery-img {
+    transform: scale(1.12);
+    filter: grayscale(0%) brightness(105%);
+}
+
+/* --- Hover State Animations --- */
+.gallery-item:hover {
+    transform: translateY(-8px) scale(1.02); /* Box moves slightly up */
+    box-shadow: 0 15px 30px rgba(52, 152, 219, 0.2); /* Soft blue shadow */
+}
+
+.gallery-item:hover .gallery-img {
+    transform: scale(1.12); /* Zooms inside the image box */
+    filter: grayscale(0%) brightness(105%); /* Brings back full colors and brightness */
+}
+
+/* Image Shine Overlay Effect */
+.gallery-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 100%);
+    transform: skewX(-25deg);
+    transition: 0.75s;
+    opacity: 0;
+}
+
+/* Triggers the shine animation on hover */
+.gallery-item:hover::after {
+    animation: shine 0.75s forwards;
+}
+
+@keyframes shine {
+    0% { left: -75%; opacity: 0; }
+    50% { opacity: 1; }
+    100% { left: 125%; opacity: 0; }
+}
+
+/* ==========================================================================
+   4. Advanced Lightbox View (Modal Popup with Background Blur)
+   ========================================================================== */
+.lightbox {
+    display: none; /* Hidden by default; controlled via JavaScript */
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.9); /* Dark blue-black overlay */
+    backdrop-filter: blur(8px); /* Blurs the background content */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Large active image animation */
+.lightbox-content {
+    max-width: 80%;
+    max-height: 80%;
+    border-radius: 12px;
+    border: 5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: Reveal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* 3D pop-up effect */
+}
+
+@keyframes Reveal {
+    from { transform: scale(0.8) translateY(30px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Floating Close 'X' Button */
+.close-btn {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 45px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.close-btn:hover {
+    color: #ff4757;
+    transform: rotate(90deg); /* Button rotates smoothly on hover */
+}
+
+/* Navigation Buttons (Next & Previous - Neumorphic Style) */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 50%; /* Circular buttons */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.nav-btn:hover {
+    background: #3498db;
+    color: white;
+    box-shadow: 0 0 15px #3498db; /* Neon glow effect */
+    border-color: #3498db;
+}
+
+.prev-btn { left: 40px; }
+.next-btn { right: 40px; }
+
+/* Click effect for navigation buttons */
+.nav-btn:active {
+    transform: translateY(-50%) scale(0.9);
+}
+
+/* ==========================================================================
+   5. Mobile Responsive Design
+   ========================================================================== */
+@media (max-width: 768px) {
+    body { padding: 20px 10px; }
+    .gallery-container { padding: 25px 15px; }
+    .gallery-container h1 { font-size: 2rem; }
+    .lightbox-content { max-width: 92%; border-width: 3px; }
+    .nav-btn { width: 45px; height: 45px; font-size: 16px; }
+    .prev-btn { left: 15px; }
+    .next-btn { right: 15px; }
+    .close-btn { top: 20px; right: 25px; font-size: 35px; }
+}
+
+/* Styling for Download Button */
+.download-btn {
+    background-color: #2ecc71; /* Modern Green Color */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+/* Hover Effect */
+.download-btn:hover {
+    background-color: #27ae60;
+    transform: scale(1.05); /* Button grows slightly */
+}
+
+/* Click Effect */
+.download-btn:active {
+    transform: scale(0.95); /* Button shrinks slightly when clicked */
+}
+
+.gallery-img {
+    width: 100%;       
+    height: 100%;      
+    object-fit: cover;  
+}
